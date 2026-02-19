@@ -1,5 +1,19 @@
 # Project Context: Chagas ECG Diagnosis
 
+> [!IMPORTANT]
+> **SYSTEM INSTRUCTIONS FOR ALL AI AGENTS (Cursor, Copilot, Claude, etc.):**
+> This `PROJECT_CONTEXT.md` is the single source of truth for the Chagas ECG Diagnosis project. 
+> 
+> **Your Responsibilities:**
+> 1. **Update Automatically:** When you modify architecture, add new features, change workflows, or alter the data pipeline, you **MUST** update this file immediately to reflect the changes.
+> 2. **Prune and Overwrite (Living Document):** Do NOT just append new information at the bottom. If a feature or logic is changed, you must LOCATE the old documentation in this file and OVERWRITE it. Delete dead code references and outdated context entirely.
+> 3. **Strict Formatting (AI-Optimized Style):**
+>    - Be highly concise, declarative, and to-the-point (Cheat-sheet style).
+>    - NO conversational fluff. NO long paragraphs.
+>    - Use Bullet points (`-`) and Bold text (`**`) for key-value mappings (e.g., `- **file_name.py**: Entry point for X`).
+>    - Map out pipelines step-by-step using arrows (e.g., `Step A -> Step B`).
+>    - Keep the document structured with clear Markdown headers (`##`).
+
 ## 🚀 Key Features
 
 ### 1. Dynamic Team Module Selection (`-tm` / `--team_module`)
