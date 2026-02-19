@@ -10,10 +10,8 @@
 # verbosity flag.
 
 import argparse
+import importlib
 import sys
-
-from helper_code import *
-from team_code import train_model
 
 # Parse arguments.
 def get_parser():
@@ -21,12 +19,17 @@ def get_parser():
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-d', '--data_folder', type=str, required=True)
     parser.add_argument('-m', '--model_folder', type=str, required=True)
+    parser.add_argument('-tm', '--team_module', type=str, default='team_code')
     parser.add_argument('-v', '--verbose', action='store_true')
     return parser
 
 # Run the code.
 def run(args):
-    train_model(args.data_folder, args.model_folder, args.verbose) ### Teams: Implement this function!!!
+    # Dynamically import the team's code.
+    team_code = importlib.import_module(args.team_module)
+    train_model = team_code.train_model
+
+    train_model(args.data_folder, args.model_folder, args.verbose)
 
 if __name__ == '__main__':
     run(get_parser().parse_args(sys.argv[1:]))

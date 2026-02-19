@@ -10,11 +10,11 @@
 # folder for saving your model's outputs, and -v is an optional verbosity flag.
 
 import argparse
+import importlib
 import os
 import sys
 
 from helper_code import *
-from team_code import load_model, run_model
 
 # Parse arguments.
 def get_parser():
@@ -23,18 +23,24 @@ def get_parser():
     parser.add_argument('-d', '--data_folder', type=str, required=True)
     parser.add_argument('-m', '--model_folder', type=str, required=True)
     parser.add_argument('-o', '--output_folder', type=str, required=True)
+    parser.add_argument('-tm', '--team_module', type=str, default='team_code')
     parser.add_argument('-v', '--verbose', action='store_true')
     parser.add_argument('-f', '--allow_failures', action='store_true')
     return parser
 
 # Run the code.
 def run(args):
+    # Dynamically import the team's code.
+    team_code = importlib.import_module(args.team_module)
+    load_model = team_code.load_model
+    run_model = team_code.run_model
+
     # Load the models.
     if args.verbose:
         print('Loading the Challenge model...')
 
     # You can use these functions to perform tasks, such as loading your model, that you only need to perform once.
-    model = load_model(args.model_folder, args.verbose) ### Teams: Implement this function!!!
+    model = load_model(args.model_folder, args.verbose)
 
     # Find the Challenge data.
     if args.verbose:
