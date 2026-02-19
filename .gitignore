@@ -1,0 +1,28 @@
+# Data directories
+training_data/
+validation_data/
+holdout_data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Models and Checkpoints
+model/
+*.pth
+*.h5
+*.ckpt
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# OS and IDE
+.vscode/
+.idea/
+.DS_Store
