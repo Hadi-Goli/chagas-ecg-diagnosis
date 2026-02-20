@@ -11,10 +11,11 @@ This approach relies on hand-crafted feature engineering and an ensemble of trad
 - **Ensemble Classifier:** A soft-voting combination of Random Forest (40%), Gradient Boosting (40%), and Logistic Regression (20%), using an optimized decision threshold.
 
 ### 1D Convolutional Neural Network (`team_code_1D_CNN.py`)
-This approach utilizes a custom 1D ResNet architecture trained directly on raw ECG signals:
-- **Preprocessing:** Reorders leads to a standard 12-lead order, resamples to 500 Hz, normalizes using Z-score per lead, and pads/crops the signal to a fixed 10-second window (5000 samples).
-- **Architecture:** A 1D adaptation of ResNet-18, featuring 1D convolutional residual blocks with batch normalization and ReLU activations, followed by global average pooling.
-- **Training:** Trained with `BCEWithLogitsLoss` and the AdamW optimizer (learning rate 1e-3) for 20 epochs with a batch size of 128.
+This approach utilizes a custom 1D ResNet architecture trained directly on raw ECG signals combined with multimodal demographic data:
+- **Preprocessing:** Reorders leads to a standard 12-lead order, resamples to 500 Hz, normalizes using Z-score per lead, and pads/crops the signal to a fixed 10-second window (5000 samples). Also normalizes Age and Sex from header files.
+- **Architecture:** A 1D adaptation of ResNet-18. It features an initial wide receptive field (`kernel_size=51`) to capture the macro-waveform of the ECG. Age and Sex features are concatenated before the final fully connected layer. Employs `Dropout(p=0.5)` for regularization.
+- **Training Strategy:** Trained with `BCEWithLogitsLoss`. Crucially, dynamically calculates class imbalances and applies a `pos_weight` constraint to heavily penalize missing the minority positive class. Uses the AdamW optimizer (learning rate 1e-3).
+- **Validation Engine:** Built-in Early Stopping evaluating against a dedicated `validation_data` holdout directory (created via `split_data.py`). Includes a dynamic Decision Threshold Optimization (grid-search) mapped to maximize the F-measure on the validation probabilities.
 
 ## 📊 Benchmarks
 

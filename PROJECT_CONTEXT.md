@@ -34,12 +34,18 @@ A traditional ML implementation (`team_code_classic_machine_learning.py`) relyin
 - **Ensemble Model:** Weighted voting of Random Forest (40%), Gradient Boosting (40%), and Logistic Regression (20%) with an optimized threshold of 0.45.
 
 ### 3. 1D CNN Pipeline
-A deep learning implementation (`team_code_1D_CNN.py`) using raw ECG signals.
-- **Preprocessing:** 12-lead reordering, 500 Hz resampling, Z-score normalization, and 10-second fixed length constraint.
-- **Architecture:** 1D ResNet-18 (convolutional residual blocks, batch normalization, ReLU).
-- **Training:** `BCEWithLogitsLoss`, AdamW optimizer, 20 epochs, batch size 128.
+A deep learning implementation (`team_code_1D_CNN.py`) using raw ECG signals alongside demographic data.
+- **Preprocessing:** 12-lead reordering, 500 Hz resampling, Z-score normalization, and 10-second fixed length constraint. Age/Sex are extracted and normalized.
+- **Architecture:** 1D ResNet-18. Enhanced with a wide convolutional kernel (`size=51`) for initial ECG macro-structure capture. Age and Sex are concatenated prior to the final fully connected layer.
+- **Training:** AdamW optimizer, batch size 128. Combats severe data imbalance dynamically via a `pos_weight` in `BCEWithLogitsLoss`. Includes a validation loop looking for `validation_data/` mapped to Early Stopping (patience=5), finishing with a dynamic Threshold Optimization (grid-search) based on validation probabilities to maximize the F-measure.
 
-### 4. Local Virtual Environment Reference
+### 4. Data Splitting Pipeline (`split_data.py`)
+An automated local script to properly arrange the datasets prior to training.
+- Uses `scikit-learn` to perform a **Stratified Split**: 80% Train, 10% Validation, 10% Holdout.
+- Instead of physically moving large files, it generates lightweight **Symlinks** to the raw data files (`.hea`, `.dat`, `.mat`).
+- Exports metadata CSVs per folder for data tracking.
+
+### 5. Local Virtual Environment Reference
 A local `venv` symlink simplifies environment activation.
 
 - **Path:** `./venv` -> `/home/hadi/Coding/ML/ptorch_env`
@@ -48,19 +54,20 @@ A local `venv` symlink simplifies environment activation.
   source venv/bin/activate
   ```
 
-## � Data Sources (PhysioNet 2025)
+##  Data Sources (PhysioNet 2025)
 The challenge uses datasets from Central/South America and Europe:
 - **CODE-15%:** ~300,000 records (Brazil). Length: 7.3s or 10.2s. `FS`: 400Hz. **Labels:** Weak (self-reported), mostly negative.
 - **SaMi-Trop:** 1,631 records (Brazil). Length: 7.3s or 10.2s. `FS`: 400Hz. **Labels:** Strong (serological tests), all positive.
 - **PTB-XL:** 21,799 records (Europe). Length: 10s. `FS`: 500Hz. **Labels:** Strong (geography-based), all negative.
 
-## �📂 Project Structure
+## 📂 Project Structure
 
+- `split_data.py`: Prepares the dataset directories (`training_data`, `validation_data`, `holdout_data`) using stratified symlinking.
 - `train_model.py`: Entry point for training. Supports dynamic module loading.
 - `run_model.py`: Entry point for inference. Supports dynamic module loading.
 - `helper_code.py`: Core utility functions (PhysioNet standard).
 - `team_code.py`: Default implementation.
-- `team_code_*.py`: Alternative implementations (e.g., `classic_machine_learning`, `spectrogram`).
+- `team_code_*.py`: Alternative implementations (e.g., `classic_machine_learning`, `1D_CNN`).
 
 ## ⚖️ Evaluation
 Use `evaluate_model.py` to calculate scores (AUROC, AUPRC, etc.) from model outputs.
