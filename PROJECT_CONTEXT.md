@@ -27,7 +27,13 @@ The pipeline supports multiple `team_code.py` implementations. You can switch be
   ```
 - **Modified Scripts:** `train_model.py`, `run_model.py`.
 
-### 2. Local Virtual Environment Reference
+### 2. Classic Machine Learning Pipeline
+A traditional ML implementation (`team_code_classic_machine_learning.py`) relying on feature engineering.
+- **Features Extracted:** Morphological (RMS, kurtosis, etc.), Frequency (power bands), HRV (R-R intervals), cross-lead correlation, and demographics.
+- **Data Balancing:** Source-aware sample weighting (sub-sampling CODE-15%) combined with SMOTE-ENN resampling.
+- **Ensemble Model:** Weighted voting of Random Forest (40%), Gradient Boosting (40%), and Logistic Regression (20%) with an optimized threshold of 0.45.
+
+### 3. Local Virtual Environment Reference
 A local `venv` symlink simplifies environment activation.
 
 - **Path:** `./venv` -> `/home/hadi/Coding/ML/ptorch_env`
