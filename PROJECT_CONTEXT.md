@@ -33,7 +33,13 @@ A traditional ML implementation (`team_code_classic_machine_learning.py`) relyin
 - **Data Balancing:** Source-aware sample weighting (sub-sampling CODE-15%) combined with SMOTE-ENN resampling.
 - **Ensemble Model:** Weighted voting of Random Forest (40%), Gradient Boosting (40%), and Logistic Regression (20%) with an optimized threshold of 0.45.
 
-### 3. Local Virtual Environment Reference
+### 3. 1D CNN Pipeline
+A deep learning implementation (`team_code_1D_CNN.py`) using raw ECG signals.
+- **Preprocessing:** 12-lead reordering, 500 Hz resampling, Z-score normalization, and 10-second fixed length constraint.
+- **Architecture:** 1D ResNet-18 (convolutional residual blocks, batch normalization, ReLU).
+- **Training:** `BCEWithLogitsLoss`, AdamW optimizer, 20 epochs, batch size 128.
+
+### 4. Local Virtual Environment Reference
 A local `venv` symlink simplifies environment activation.
 
 - **Path:** `./venv` -> `/home/hadi/Coding/ML/ptorch_env`
@@ -42,7 +48,13 @@ A local `venv` symlink simplifies environment activation.
   source venv/bin/activate
   ```
 
-## 📂 Project Structure
+## � Data Sources (PhysioNet 2025)
+The challenge uses datasets from Central/South America and Europe:
+- **CODE-15%:** ~300,000 records (Brazil). Length: 7.3s or 10.2s. `FS`: 400Hz. **Labels:** Weak (self-reported), mostly negative.
+- **SaMi-Trop:** 1,631 records (Brazil). Length: 7.3s or 10.2s. `FS`: 400Hz. **Labels:** Strong (serological tests), all positive.
+- **PTB-XL:** 21,799 records (Europe). Length: 10s. `FS`: 500Hz. **Labels:** Strong (geography-based), all negative.
+
+## �📂 Project Structure
 
 - `train_model.py`: Entry point for training. Supports dynamic module loading.
 - `run_model.py`: Entry point for inference. Supports dynamic module loading.
