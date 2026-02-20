@@ -2,6 +2,7 @@
 training_data/
 validation_data/
 holdout_data/
+holdout_outputs/
 
 # Python
 __pycache__/
