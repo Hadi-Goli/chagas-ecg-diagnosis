@@ -29,7 +29,7 @@ TARGET_FS = 500
 TARGET_LENGTH = 5000  # 10 seconds at 500 Hz
 LEADS = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6']
 BATCH_SIZE = 128
-EPOCHS = 20
+EPOCHS = 10#20
 LEARNING_RATE = 1e-3
 
 ################################################################################
@@ -365,8 +365,8 @@ def train_model(data_folder, model_folder, verbose):
             patience_counter = 0
             
             # Save probabilities for threshold calculation later
-            best_val_probs = []
-            best_val_labels = []
+            best_val_probs = epoch_val_probs
+            best_val_labels = epoch_val_labels
             
             # We need to collect raw probabilities for the *best* model to calculate threshold
             # Since we just ran validation, we could theoretically reuse those tensors if we stored them,

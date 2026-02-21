@@ -38,6 +38,7 @@ A deep learning implementation (`team_code_1D_CNN.py`) using raw ECG signals alo
 - **Preprocessing:** 12-lead reordering, 500 Hz resampling, Z-score normalization, and 10-second fixed length constraint. Age/Sex are extracted and normalized.
 - **Architecture:** 1D ResNet-18. Enhanced with a wide convolutional kernel (`size=51`) for initial ECG macro-structure capture. Age and Sex are concatenated prior to the final fully connected layer.
 - **Training:** AdamW optimizer, batch size 128. Combats severe data imbalance dynamically via a `pos_weight` in `BCEWithLogitsLoss`. Includes a validation loop looking for `validation_data/` mapped to Early Stopping (patience=5), finishing with a dynamic Threshold Optimization (grid-search) based on validation probabilities to maximize the F-measure.
+- **Limitations:** Performance saturated around `~0.44` Challenge Score. Although 1D convolutions extract morphological features well, they structurally fail to adequately capture long-term Heart Rate Variability (HRV) patterns over a fixed 10-second window, justifying a shift towards 2D Spectrogram approaches.
 
 ### 4. Data Splitting Pipeline (`split_data.py`)
 An automated local script to properly arrange the datasets prior to training.
@@ -51,7 +52,7 @@ A local `venv` symlink simplifies environment activation.
 - **Path:** `./venv` -> `/home/hadi/Coding/ML/ptorch_env`
 - **Activation:**
   ```bash
-  source venv/bin/activate
+  source .venv/bin/activate
   ```
 
 ##  Data Sources (PhysioNet 2025)

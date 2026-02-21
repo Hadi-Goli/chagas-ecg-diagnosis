@@ -22,4 +22,4 @@ This approach utilizes a custom 1D ResNet architecture trained directly on raw E
 | Model | Challenge Score | AUROC | AUPRC | Accuracy | F-measure |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | Classic Machine Learning | 0.629 | 0.913 | 0.611 | 0.984 | 0.611 |
-| 1D CNN (`team_code_1D_CNN.py`) | 0.473 | 0.857 | 0.362 | 0.976 | 0.286 |
+| 1D CNN | 0.442 | 0.856 | 0.316 | 0.966 | 0.327 |
