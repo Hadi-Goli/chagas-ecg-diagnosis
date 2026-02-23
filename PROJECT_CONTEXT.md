@@ -70,6 +70,23 @@ The challenge uses datasets from Central/South America and Europe:
 - `team_code.py`: Default implementation.
 - `team_code_*.py`: Alternative implementations (e.g., `classic_machine_learning`, `1D_CNN`).
 
+## 💻 Hardware & Execution Environment
+- **Primary Execution Environment (Laptop):**
+  - **GPU:** NVIDIA GeForce RTX 3050 Laptop GPU
+  - **VRAM:** 4096 MB
+  - **CPU:** Intel Core i5-12450H
+  - **RAM:** 7.38 GB
+  - **GPU:** NVIDIA GeForce RTX 3050 Laptop GPU
+  - **VRAM:** 4096 MB
+  - **CPU:** Intel Core i5-12450H
+  - **RAM:** 7.38 GB
+- **Secondary Execution Environments:** Google Colab, Kaggle Notebook
+*Code is prioritized to run on the primary laptop environment, then adapted for Colab/Kaggle as needed.*
+
+## 📄 Documentation
+- **Main README:** `README.md` (English)
+- **Persian README:** `README_FA.md` (MUST be kept in sync / updated whenever `README.md` is updated).
+
 ## ⚖️ Evaluation
 Use `evaluate_model.py` to calculate scores (AUROC, AUPRC, etc.) from model outputs.
 ```bash
