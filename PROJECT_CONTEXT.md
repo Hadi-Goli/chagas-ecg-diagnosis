@@ -40,13 +40,24 @@ A deep learning implementation (`team_code_1D_CNN.py`) using raw ECG signals alo
 - **Training:** AdamW optimizer, batch size 128. Combats severe data imbalance dynamically via a `pos_weight` in `BCEWithLogitsLoss`. Includes a validation loop looking for `validation_data/` mapped to Early Stopping (patience=5), finishing with a dynamic Threshold Optimization (grid-search) based on validation probabilities to maximize the F-measure.
 - **Limitations:** Performance saturated around `~0.44` Challenge Score. Although 1D convolutions extract morphological features well, they structurally fail to adequately capture long-term Heart Rate Variability (HRV) patterns over a fixed 10-second window, justifying a shift towards 2D Spectrogram approaches.
 
-### 4. Data Splitting Pipeline (`split_data.py`)
+### 4. Spectrogram + EfficientNet-B0 Pipeline
+A 2D deep learning approach (`team_code_spectrogram.py`) to capture both morphology and HRV using Time-Frequency representations.
+- **Rationale:** Addresses 1D CNN limitations by using STFT to model temporal changes in frequencies. Selected STFT over Wavelets (CWT) to respect the strict 4GB VRAM constraint.
+- **Signal to Image Conversion:**
+  - Signals are resampled to `400Hz` and length-fixed to `10` seconds.
+  - Generates STFT Spectrograms (`n_fft=1024`, `hop=64`) and isolates the `0-40Hz` medical spectrum.
+  - Transforms magnitude to dB (cliiped `[-80, 0]`) and applies Z-score normalization.
+  - The 12 leads are tiled into a `4x3 grid` before bilinear interpolating down to `224x224x3`, effectively mitigating destructive aspect-ratio distortions.
+- **Architecture & Training:** Pretrained `EfficientNet-B0`. The ImageNet classifier is replaced with a custom head that concatenates the 1280-dim feature vector with normalized age and sex priors. Trained using **PyTorch AMP** (Mixed Precision) allowing a batch size of `32` despite VRAM limitations. Differential learning rates (`1e-4` for backbone, `1e-3` for head) are utilized.
+- **Validation & Results:** Built-in Early Stopping evaluating against `validation_data` (best at Epoch 5, Loss: 0.6434). Dynamic threshold optimization maximizes F-measure (optimal threshold found: `0.70`). Achieves a final Challenge Score of `0.379`.
+
+### 5. Data Splitting Pipeline (`split_data.py`)
 An automated local script to properly arrange the datasets prior to training.
 - Uses `scikit-learn` to perform a **Stratified Split**: 80% Train, 10% Validation, 10% Holdout.
 - Instead of physically moving large files, it generates lightweight **Symlinks** to the raw data files (`.hea`, `.dat`, `.mat`).
 - Exports metadata CSVs per folder for data tracking.
 
-### 5. Local Virtual Environment Reference
+### 6. Local Virtual Environment Reference
 A local `venv` symlink simplifies environment activation.
 
 - **Path:** `./venv` -> `/home/hadi/Coding/ML/ptorch_env`
@@ -72,10 +83,6 @@ The challenge uses datasets from Central/South America and Europe:
 
 ## 💻 Hardware & Execution Environment
 - **Primary Execution Environment (Laptop):**
-  - **GPU:** NVIDIA GeForce RTX 3050 Laptop GPU
-  - **VRAM:** 4096 MB
-  - **CPU:** Intel Core i5-12450H
-  - **RAM:** 7.38 GB
   - **GPU:** NVIDIA GeForce RTX 3050 Laptop GPU
   - **VRAM:** 4096 MB
   - **CPU:** Intel Core i5-12450H
